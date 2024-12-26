@@ -9,41 +9,39 @@ namespace Feed.API
 {
     public class StartUp
     {
-        
-        public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+        private IConfiguration Configuration { get; }
+
+        public StartUp(IConfiguration configuration)
         {
-            services.Configure<RabbitMQSettings>(configuration.GetSection("RabbitMQSettings"));
+            Configuration = configuration;
+        }
+
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.Configure<RabbitMQSettings>(Configuration.GetSection("RabbitMQSettings"));
+
             // Register Redis Cache
-            services.AddStackExchangeRedisCache(options =>
+             services.AddStackExchangeRedisCache(options =>
             {
-                options.Configuration = "localhost:6379";
+                options.Configuration = Configuration.GetValue<string>("Redis:ConnectionString") ?? "localhost:6379";
             });
 
             // Register RabbitMQ services
             services.AddSingleton<IConnectionFactory>(sp =>
             {
+                var rabbitConfig = Configuration.GetSection("RabbitMQSettings").Get<RabbitMQSettings>();
+
                 return new ConnectionFactory
                 {
-                    HostName = "localhost",
-                    // Add any additional RabbitMQ configuration here
+                    HostName = rabbitConfig?.Host ?? "localhost",
+                    UserName = rabbitConfig?.UserName ?? "guest",
+                    Password = rabbitConfig?.Password ?? "guest",
+                    VirtualHost = rabbitConfig?.VirtualHost ?? "/",
+                    Port = rabbitConfig?.Port ?? 5672,
                     RequestedHeartbeat = TimeSpan.FromSeconds(60),
                     AutomaticRecoveryEnabled = true
                 };
             });
-
-            // Register IConnection as singleton
-            //services.AddSingleton<IConnection>(sp =>
-            //{
-            //    var factory = sp.GetRequiredService<IConnectionFactory>();
-            //    return (IConnection)factory.CreateConnectionAsync();
-            //});
-
-            // Register IChannel (IModel in RabbitMQ.Client) as scoped
-            //services.AddScoped<IChannel>(sp =>
-            //{
-            //    var connection = sp.GetRequiredService<IConnection>();
-            //    return (IChannel)connection.CreateChannelAsync();
-            //});
 
             // Register message queue service
             services.AddSingleton<IMessageQueueService, RabbitMQService>();
@@ -56,6 +54,19 @@ namespace Feed.API
 
             // Add background service for processing likes
             services.AddHostedService<LikeProcessingService>();
+        }
+
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+                app.UseHttpsRedirection();
+            }
         }
     }
 }

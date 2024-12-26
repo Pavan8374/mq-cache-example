@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.12.35527.113 d17.12
+VisualStudioVersion = 17.12.35527.113
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feed.API", "Feed.API.csproj", "{EEDD1304-0996-4D02-8023-FFD0B1E5D2A6}"
 EndProject
@@ -12,6 +12,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feed.Cache", "..\Feed.Cache\Feed.Cache.csproj", "{EEAB3499-A871-4619-BA5F-B3AA458445F0}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feed.MQ", "..\Feed.MQ\Feed.MQ.csproj", "{596964FB-18DF-4A1E-AB76-E4F49E4BBE94}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feed.API.Tests", "..\Feed.API.Tests\Feed.API.Tests.csproj", "{EF8C55C8-E478-4E5A-A3C1-D83BD9C90C03}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +41,10 @@ Global
 		{596964FB-18DF-4A1E-AB76-E4F49E4BBE94}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{596964FB-18DF-4A1E-AB76-E4F49E4BBE94}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{596964FB-18DF-4A1E-AB76-E4F49E4BBE94}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EF8C55C8-E478-4E5A-A3C1-D83BD9C90C03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EF8C55C8-E478-4E5A-A3C1-D83BD9C90C03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EF8C55C8-E478-4E5A-A3C1-D83BD9C90C03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EF8C55C8-E478-4E5A-A3C1-D83BD9C90C03}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

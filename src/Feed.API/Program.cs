@@ -9,10 +9,11 @@ using Microsoft.EntityFrameworkCore;
 var builder = WebApplication.CreateBuilder(args);
 ConfigurationManager configuration = builder.Configuration;
 
-var startup = new StartUp();
+var startup = new StartUp(configuration);
 // Add services to the container.
 
 builder.Services.AddControllers();
+builder.Services.AddEndpointsApiExplorer();
 // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
 builder.Services.AddOpenApi();
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
@@ -28,7 +29,7 @@ builder.Services.AddTransient<IUserLikeRepository, UserLikeRepository>();
 builder.Services.AddTransient<IUserLikeService, UserLikeService>();
 
 
-startup.ConfigureServices(builder.Services, configuration);
+startup.ConfigureServices(builder.Services);
 
 
 //builder.Services.AddSingleton<ICacheService, RedisCacheService>();
@@ -47,6 +48,8 @@ if (app.Environment.IsDevelopment())
     app.MapOpenApi();
 }
 
+app.UseRouting();
+app.UseAuthentication();
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

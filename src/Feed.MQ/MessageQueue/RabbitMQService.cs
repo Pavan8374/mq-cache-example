@@ -28,7 +28,7 @@ namespace Feed.MQ.MessageQueue
                 {
                     HostName = _rabbitMQSettings.Host,
                     Port = _rabbitMQSettings.Port,
-                    UserName = _rabbitMQSettings.Username,
+                    UserName = _rabbitMQSettings.UserName,
                     Password = _rabbitMQSettings.Password,
                 };
                 using var _connection = await factory.CreateConnectionAsync();
@@ -66,11 +66,12 @@ namespace Feed.MQ.MessageQueue
             {
                 var factory = new ConnectionFactory()
                 {
-                    HostName = _rabbitMQSettings.Host,
+                    HostName = _rabbitMQSettings.Host ?? "localhost",
                     Port = _rabbitMQSettings.Port,
-                    UserName = _rabbitMQSettings.Username,
-                    Password = _rabbitMQSettings.Password,
+                    UserName = _rabbitMQSettings.UserName ?? "guest",
+                    Password = _rabbitMQSettings.Password ?? "guest",
                 };
+                factory.Port = 5672;
                 using var _connection = await factory.CreateConnectionAsync();
 
                 using var _channel = await _connection.CreateChannelAsync();
