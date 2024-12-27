@@ -4,9 +4,9 @@
 
     namespace Feed.API.Controllers
     {
-        [ApiController]
-        [Route("api/[controller]")]
-        public class LikesController : ControllerBase
+    [ApiController]
+    [Route("/v{version:ApiVersion}/[controller]")]
+    public class LikesController : ControllerBase
         {
             private readonly ILikeManager _likeManager;
             private readonly ILogger<LikesController> _logger;

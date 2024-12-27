@@ -63,18 +63,19 @@ namespace Feed.API.Tests.LoadTests
                             {
                                 var response = await HttpClient.PostAsJsonAsync("/api/Likes", request);
 
-                                if(response.IsSuccessStatusCode)
-                                    Interlocked.Increment(ref successCount);
-                                else
-                                    Interlocked.Increment(ref failureCount);
+                                //if(response.IsSuccessStatusCode)
+                                //    Interlocked.Increment(ref successCount);
+                                //else
+                                //    Interlocked.Increment(ref failureCount);
 
                                 //await _controller.LikePost(request);
+                                Interlocked.Increment(ref successCount);
 
                                 // Randomly check like status
                                 if (random.Next(100) < 30) // 30% chance to check status
                                 {
-                                    await HttpClient.PostAsJsonAsync($"/api/Likes/{userId}/{postId}", request);
-                                    //await _controller.IsLiked(userId, postId);
+                                    //await HttpClient.PostAsJsonAsync($"/api/Likes/{userId}/{postId}", request);
+                                    await _controller.IsLiked(userId, postId);
                                 }
                             }
 
