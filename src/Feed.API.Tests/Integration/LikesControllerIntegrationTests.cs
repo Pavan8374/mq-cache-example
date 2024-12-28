@@ -45,7 +45,7 @@ namespace Feed.API.Tests.Integration
 
                 var result = response as ObjectResult;
 
-                Console.WriteLine(result.StatusCode.HasValue);
+                Console.WriteLine(result?.Value);
                 return result.StatusCode.HasValue;
                 
             });
