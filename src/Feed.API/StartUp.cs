@@ -8,9 +8,7 @@ using Feed.Domain.Users;
 using Feed.EF;
 using Feed.EF.Repositories;
 using Feed.MQ.MessageQueue;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 using RabbitMQ.Client;
 
 namespace Feed.API
@@ -27,7 +25,7 @@ namespace Feed.API
         public virtual void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
-
+            services.AddOpenApi();
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddOpenApi();
@@ -94,6 +92,12 @@ namespace Feed.API
         //}
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //for openapi document generation.
+            //var builder = WebApplication.CreateBuilder();
+            //builder.Services.AddOpenApi();
+            //var app1 = builder.Build();
+            //app1.MapOpenApi();  
+
 
             app.UseCors(options =>
             {
@@ -119,6 +123,7 @@ namespace Feed.API
             {
                 endpoints.MapControllers();
             });
+            //app1.Run();
         }
         private void ConfigureSqlServerContext(IServiceCollection services)
         {

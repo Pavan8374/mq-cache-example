@@ -36,7 +36,7 @@ namespace Feed.API.Manager.UserLikes
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error handling like request for user {UserId} and post {PostId}",
+                _logger.LogError(ex, $"Error handling like request for user {request.UserId} and post {request.PostId}",
                     request.UserId, request.PostId);
                 throw;
             }
@@ -51,7 +51,7 @@ namespace Feed.API.Manager.UserLikes
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Error checking like status for user {UserId} and post {PostId}",
+                _logger.LogError(ex, $"Error checking like status for user {userId} and post {postId}",
                     userId, postId);
                 throw;
             }

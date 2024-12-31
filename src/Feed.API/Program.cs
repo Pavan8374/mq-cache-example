@@ -64,7 +64,7 @@ namespace Feed.API
             //var isInjectSqlServerConnectionString = builder.Build().GetValue<bool>("IsInjectSqlServerConnectionString");
             //if (isInjectSqlServerConnectionString)
             //    return $"{Environment.GetEnvironmentVariable("SQL_SERVER_CONNECTION")}{catalog}";
-
+           
             return connection;
         }
     }
