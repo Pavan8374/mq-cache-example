@@ -1,4 +1,5 @@
 ﻿using Asp.Versioning;
+using Feed.API.Extensions;
 using Feed.API.Manager.UserLikes;
 using Feed.API.Utility.BackgroundJobs;
 using Feed.Cache.Cache;
@@ -72,6 +73,9 @@ namespace Feed.API
             // Add background service for processing likes
             services.AddHostedService<LikeProcessingService>();
 
+            services.AddUserTracker();
+            services.AddSession();
+
             AddServices(services);
             AddVersioning(services);
         }
@@ -98,6 +102,8 @@ namespace Feed.API
             //var app1 = builder.Build();
             //app1.MapOpenApi();  
 
+            app.UseSession();
+            app.UseUserTracker();
 
             app.UseCors(options =>
             {
