@@ -1,5 +1,6 @@
 ﻿using Feed.API.Models.Follows;
 using Feed.Domain.Follows;
+using Feed.ML.FollowRecommendations;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -9,10 +10,12 @@ namespace Feed.API.Controllers
     [Route("/v{version:ApiVersion}/[controller]")]
     public class FollowController : ControllerBase
     {
-        private readonly IFolowService _followService; 
-        public FollowController(IFolowService folowService)
+        private readonly IFollowService _followService;
+        private readonly IFollowRecommendation _followRecommendation;
+        public FollowController(IFollowService folowService, IFollowRecommendation followRecommendation)
         {
             _followService = folowService;
+            _followRecommendation = followRecommendation;
         }
 
         [Authorize]
@@ -56,5 +59,28 @@ namespace Feed.API.Controllers
             }
 
         }
+
+        [HttpGet("followSuggestions/{userId}")]
+        [ProducesResponseType(typeof(List<Guid>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(string), StatusCodes.Status500InternalServerError)]
+        public async Task<IActionResult> FollowSuggestions(Guid userId, double latitude, double lngitude)
+        {
+            try
+            {
+                var query = new UserSuggestionQuery()
+                {
+                    UserId = userId,
+                    Latitude = (long)latitude,
+                    Longitude = (long)lngitude
+                };
+                var followers = await _followRecommendation.GetFollowRecommendationsAsync(query);
+                return Ok(followers);
+            }
+            catch(Exception ex)
+            {
+                return StatusCode(500, "Internal server");
+            }
+        }
+
     }
 }

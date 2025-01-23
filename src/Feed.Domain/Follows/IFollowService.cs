@@ -2,7 +2,7 @@
 
 namespace Feed.Domain.Follows
 {
-    public interface IFolowService : IBaseService<Follow>
+    public interface IFollowService : IBaseService<Follow>
     {
         public Task<Follow> GetFollowRecord(Guid followerId, Guid followingId);
 

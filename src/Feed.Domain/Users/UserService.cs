@@ -9,5 +9,12 @@ namespace Feed.Domain.Users
         {
             _userRepository = userRepository;
         }
+
+        public async Task SeedDummyData(int userCount, int maxFollowsPerUser, double centerLatitude, double centerLongitude)
+        {
+            await _userRepository.SeedDummyData(userCount, maxFollowsPerUser, centerLatitude, centerLongitude);
+        }
+
+
     }
 }

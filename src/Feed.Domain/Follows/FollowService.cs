@@ -2,7 +2,7 @@
 
 namespace Feed.Domain.Follows
 {
-    public class FollowService : BaseService<Follow>, IFolowService
+    public class FollowService : BaseService<Follow>, IFollowService
     {
         private readonly IFollowRepository _followRepository;
         public FollowService(IFollowRepository followRepository) : base(followRepository)

@@ -4,10 +4,12 @@ using Feed.API.Manager.UserLikes;
 using Feed.API.Utility.BackgroundJobs;
 using Feed.Cache.Cache;
 using Feed.Domain.Contents;
+using Feed.Domain.Follows;
 using Feed.Domain.UserInteractions;
 using Feed.Domain.Users;
 using Feed.EF;
 using Feed.EF.Repositories;
+using Feed.ML.FollowRecommendations;
 using Feed.MQ.MessageQueue;
 using Microsoft.EntityFrameworkCore;
 using RabbitMQ.Client;
@@ -89,6 +91,11 @@ namespace Feed.API
 
             services.AddTransient<IUserLikeRepository, UserLikeRepository>();
             services.AddTransient<IUserLikeService, UserLikeService>();
+
+            services.AddTransient<IFollowRepository, FollowRepository>();
+            services.AddTransient<IFollowService, FollowService>();
+
+            services.AddTransient<IFollowRecommendation, FollowRecommendation>();   
         }
         //protected virtual void AddAuthorization(IServiceCollection services)
         //{
