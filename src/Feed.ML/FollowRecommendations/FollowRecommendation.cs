@@ -35,7 +35,7 @@ namespace Feed.ML.FollowRecommendations
 
             // Step 3: Filter follow data to include only nearby users
             var filteredFollowData = followData
-                .Where(fd => nearbyUsers.Contains(fd.TargetUserId))
+                .Where(fd => nearbyUsers.Contains(Guid.Parse(fd.TargetUserId)))
                 .ToList();
 
             // Step 4: Prepare training data
@@ -97,8 +97,8 @@ namespace Feed.ML.FollowRecommendations
                 {
                     var prediction = predictionEngine.Predict(new FollowData
                     {
-                        UserId = userId,
-                        TargetUserId = targetUserId
+                        UserId = userId.ToString(),
+                        TargetUserId = targetUserId.ToString()
                     });
                     return new { TargetUserId = targetUserId, Score = prediction.Score };
                 })
@@ -117,8 +117,8 @@ namespace Feed.ML.FollowRecommendations
 
             return follows.Select(f => new FollowData
             {
-                UserId = f.FollowerId,
-                TargetUserId = f.FollowingId,
+                UserId = f.FollowerId.ToString(),
+                TargetUserId = f.FollowingId.ToString(),
                 Rating = 1 // Implicit feedback: follow action as a positive rating.
             }).ToList();
         }
@@ -158,10 +158,10 @@ namespace Feed.ML.FollowRecommendations
         public class FollowData
         {
             [LoadColumn(0)]
-            public Guid UserId { get; set; }
+            public string UserId { get; set; }
 
             [LoadColumn(1)]
-            public Guid TargetUserId { get; set; }
+            public string TargetUserId { get; set; }
 
             [LoadColumn(2)]
             public float Rating { get; set; } = 1;
