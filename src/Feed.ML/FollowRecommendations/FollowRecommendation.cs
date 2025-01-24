@@ -27,27 +27,36 @@ namespace Feed.ML.FollowRecommendations
         /// <returns>List of recommended user IDs.</returns>
         public async Task<List<Guid>> GetFollowRecommendationsAsync(UserSuggestionQuery query)
         {
-            // Step 1: Prepare the follow data
-            var followData = await PrepareFollowData();
+            try
+            {
+                // Step 1: Prepare the follow data
+                var followData = await PrepareFollowData();
 
-            // Step 2: Get nearby users
-            var nearbyUsers = GetNearbyUsers(query);
+                // Step 2: Get nearby users
+                var nearbyUsers = GetNearbyUsers(query);
 
-            // Step 3: Filter follow data to include only nearby users
-            var filteredFollowData = followData
-                .Where(fd => nearbyUsers.Contains(Guid.Parse(fd.TargetUserId)))
-                .ToList();
+                // Step 3: Filter follow data to include only nearby users
+                var filteredFollowData = followData
+                    .Where(fd => nearbyUsers.Contains(Guid.Parse(fd.TargetUserId)))
+                    .ToList();
 
-            // Step 4: Prepare training data
-            var trainData = PrepareTrainData(filteredFollowData);
+                // Step 4: Prepare training data
+                var trainData = PrepareTrainData(filteredFollowData);
 
-            // Step 5: Train the model
-            var model = TrainModel(trainData);
+                // Step 5: Train the model
+                var model = TrainModel(trainData);
 
-            // Step 6: Predict recommendations for the user
-            var recommendedUsers = GetRecommendations(model, query.UserId, nearbyUsers);
+                // Step 6: Predict recommendations for the user
+                var recommendedUsers = GetRecommendations(model, query.UserId, nearbyUsers);
 
-            return recommendedUsers;
+                return recommendedUsers;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+                
         }
 
         private IDataView PrepareTrainData(List<FollowData> followData)
@@ -62,28 +71,37 @@ namespace Feed.ML.FollowRecommendations
 
         private ITransformer TrainModel(IDataView trainData)
         {
-
-            // Define the pipeline
-            var pipeline = _mlContext.Recommendation().Trainers.MatrixFactorization(new MatrixFactorizationTrainer.Options
+            try
             {
-                MatrixColumnIndexColumnName = nameof(FollowData.UserIdEncoded),
-                MatrixRowIndexColumnName = nameof(FollowData.TargetUserIdEncoded),
-                LabelColumnName = nameof(FollowData.Rating),
-                NumberOfIterations = 20,
-                ApproximationRank = 100
-            });
+                // Define the pipeline
+                var pipeline = _mlContext.Recommendation().Trainers.MatrixFactorization(new MatrixFactorizationTrainer.Options
+                {
+                    MatrixColumnIndexColumnName = nameof(FollowData.UserIdEncoded),
+                    MatrixRowIndexColumnName = nameof(FollowData.TargetUserIdEncoded),
+                    LabelColumnName = nameof(FollowData.Rating),
+                    NumberOfIterations = 20,
+                    ApproximationRank = 100
+                });
 
-            // Encode the UserId and TargetUserId as keys for Matrix Factorization
-            var preprocessingPipeline = _mlContext.Transforms.Conversion
-                .MapValueToKey(nameof(FollowData.UserId), nameof(FollowData.UserIdEncoded))
-                .Append(_mlContext.Transforms.Conversion.MapValueToKey(nameof(FollowData.TargetUserId), nameof(FollowData.TargetUserIdEncoded)));
+                // Encode the UserId and TargetUserId as keys for Matrix Factorization
+                var preprocessingPipeline = _mlContext.Transforms.Conversion
+                    .MapValueToKey(nameof(FollowData.UserId), nameof(FollowData.UserIdEncoded))
+                    .Append(_mlContext.Transforms.Conversion.MapValueToKey(nameof(FollowData.TargetUserId), nameof(FollowData.TargetUserIdEncoded)));
 
-            var fullPipeline = preprocessingPipeline.Append(pipeline);
+                var fullPipeline = preprocessingPipeline.Append(pipeline);
 
-            // Train the model
-            var model = fullPipeline.Fit(trainData);
+                // Train the model
+                var model = fullPipeline.Fit(trainData);
 
-            return model;
+                return model;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
+
+            
         }
 
         private List<Guid> GetRecommendations(ITransformer model, Guid userId, HashSet<Guid> nearbyUsers)
@@ -166,7 +184,11 @@ namespace Feed.ML.FollowRecommendations
             [LoadColumn(2)]
             public float Rating { get; set; } = 1;
 
+            // Change to use Key<uint> type
+            [KeyType(count: 1000)] // Specify an appropriate max count
             public uint UserIdEncoded { get; set; }
+
+            [KeyType(count: 1000)] // Specify an appropriate max count
             public uint TargetUserIdEncoded { get; set; }
         }
 

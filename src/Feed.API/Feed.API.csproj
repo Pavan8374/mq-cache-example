@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Feed.Cache\Feed.Cache.csproj" />
+    <ProjectReference Include="..\Feed.Domain\Feed.Domain.csproj" />
     <ProjectReference Include="..\Feed.EF\Feed.EF.csproj" />
     <ProjectReference Include="..\Feed.ML\Feed.ML.csproj" />
     <ProjectReference Include="..\Feed.MQ\Feed.MQ.csproj" />
