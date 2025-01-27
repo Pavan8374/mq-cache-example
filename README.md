@@ -25,7 +25,7 @@ This project is a high-performance User Management and Recommendation System des
 
 ### Prerequisites
 
-- [.NET 6.0 SDK](https://dotnet.microsoft.com/download/dotnet/6.0)
+- [.NET 9.0 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/9.0)
 - SQL Server (or any compatible database)
 - [Visual Studio](https://visualstudio.microsoft.com/) or any IDE of your choice
 
