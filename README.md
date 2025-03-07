@@ -33,7 +33,7 @@ This project is a high-performance User Management and Recommendation System des
 
 1. Clone the repository:
 
-git clone [(https://github.com/Pavan8374/mq-cache-example.git)](https://github.com/Pavan8374/mq-cache-example.git)
+git clone [https://github.com/Pavan8374/mq-cache-example.git](https://github.com/Pavan8374/mq-cache-example.git)
 cd mq-cache-example
 
 
